@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link, Outlet } from "react-router-dom";
 
 const Header = ({}) => {
   return (
@@ -74,9 +75,15 @@ const Icon = ({ d, hoverColor, navigateTo }) => {
 const Navbar = () => {
   return (
     <nav className="flex-row divide-x divide-textBlue">
-      <a className="self-center text-text px-3">Login</a>
-      <a className="self-center text-text px-3">Search documents</a>
-      <a className="self-center text-text px-3">Download document</a>
+      <Link className="self-center text-text px-3" to={`login`}>
+        Login
+      </Link>
+      <Link className="self-center text-text px-3" to={`/`}>
+        Search documents
+      </Link>
+      <Link className="self-center text-text px-3" to={`/`}>
+        Download document
+      </Link>
     </nav>
   );
 };
