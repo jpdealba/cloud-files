@@ -52,7 +52,7 @@ export default function Login() {
             />
           </div>
           <div className="xl:ml-20 xl:w-5/12 lg:w-5/12 md:w-8/12 mb-12 md:mb-0">
-            <p class="text-lg mb-0 mr-4">Sign in with</p>
+            <p className="text-lg mb-0 mr-4">Sign in with</p>
             <form>
               <div
                 className="flex items-center my-4 before:flex-1 before:border-t before:border-gray-300 
