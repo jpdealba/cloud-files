@@ -11,14 +11,14 @@ const Header = ({}) => {
       className="p-4 rounded-b-lg md:flex md:flex-row sm:flex-col
         md:justify-between bg-secondary shadow-header "
     >
-      <div className="text-center">
+      <div className="text-center md:text-start sm:w-full md:w-1/3 ">
         <h1 className="text-text">Cloud Files</h1>
       </div>
-      <div>
+      <div className=" md:w-1/3 sm:w-full ">
         <Navbar state={state} dispatch={dispatch} />
       </div>
 
-      <div className="divide-x flex-row flex divide-selected justify-center">
+      <div className="divide-x flex-row flex divide-selected justify-center md:justify-end  md:w-1/3 sm:w-full ">
         <Icons />
       </div>
     </div>
@@ -27,7 +27,7 @@ const Header = ({}) => {
 
 const Icons = () => {
   return (
-    <div className="right flex space-x-6 flex-row mr-5">
+    <div className="right flex space-x-6 flex-row">
       <Icon
         d={
           "M549.655 124.083c-6.281-23.65-24.787-42.276-48.284-48.597C458.781 64 288 64 288 64S117.22 64 74.629 75.486c-23.497 6.322-42.003 24.947-48.284 48.597-11.412 42.867-11.412 132.305-11.412 132.305s0 89.438 11.412 132.305c6.281 23.65 24.787 41.5 48.284 47.821C117.22 448 288 448 288 448s170.78 0 213.371-11.486c23.497-6.321 42.003-24.171 48.284-47.821 11.412-42.867 11.412-132.305 11.412-132.305s0-89.438-11.412-132.305zm-317.51 213.508V175.185l142.739 81.205-142.739 81.201z"
@@ -78,17 +78,17 @@ const Icon = ({ d, hoverColor, navigateTo }) => {
 
 const Navbar = ({ state, dispatch }) => {
   return (
-    <nav className="flex-row divide-x divide-textBlue">
+    <nav className="divide-x divide-textBlue flex justify-center items-center">
       {!state.loggedIn && (
-        <Link className="self-center text-text px-3" to={`login`}>
+        <Link className="self-center text-text px-2" to={`login`}>
           Login
         </Link>
       )}
-      <Link className="self-center text-text px-3" to={`/`}>
-        Search documents
+      <Link className="self-center text-text px-2" to={`/`}>
+        Search
       </Link>
-      <Link className="self-center text-text px-3" to={`/`}>
-        Download document
+      <Link className="self-center text-text px-2" to={`/`}>
+        Download
       </Link>
       {state.loggedIn && (
         <button
@@ -96,7 +96,7 @@ const Navbar = ({ state, dispatch }) => {
             dispatch(logOut());
           }}
         >
-          <h1 className="self-center text-textBlue px-3">Logout</h1>
+          <h1 className="self-center text-textBlue px-2">Logout</h1>
         </button>
       )}
     </nav>
