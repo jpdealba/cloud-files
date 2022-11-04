@@ -1,11 +1,18 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { Provider } from "react-redux";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import ErrorPage from "./routes/error";
-import { default as Contact, default as Login } from "./routes/login";
+
+import {
+  BrowserRouter,
+  createBrowserRouter,
+  RouterProvider,
+} from "react-router-dom";
+
+import ErrorPage from "./components/error";
+import { default as Login } from "./routes/login";
 import Root from "./routes/root";
-import store from "./store/reducers";
+
+import reducers from "./store/reducers";
 import "./styles/index.css";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
@@ -22,10 +29,13 @@ const router = createBrowserRouter([
     ],
   },
 ]);
+
 root.render(
-  <Provider store={store}>
+  <Provider store={reducers}>
     <React.StrictMode>
-      <RouterProvider router={router} />
+      <BrowserRouter>
+        <Root />
+      </BrowserRouter>
     </React.StrictMode>
   </Provider>
 );

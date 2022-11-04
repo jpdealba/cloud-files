@@ -1,76 +1,66 @@
-import { Form } from "react-router-dom";
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import firebase from "../services/firebase";
+import { increment } from "../store/slices/counterSlice";
+import { logIn } from "../store/slices/firebaseSlice";
+const auth = getAuth();
 
 export default function Login() {
-  const contact = {
-    first: "Your",
-    last: "Name",
-    avatar: "https://placekitten.com/g/200/200",
-    twitter: "your_handle",
-    notes: "Some notes",
-    favorite: true,
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const state = useSelector((state) => state.firebase);
+  const dispatch = useDispatch();
+  // console.log(firebase);
+  const log = async () => {
+    await signInWithEmailAndPassword(auth, email, password)
+      .then((res) => {
+        console.log(res);
+        dispatch(
+          logIn({
+            displayName: res.user.displayName,
+            email: res.user.email,
+            uid: res.user.uid,
+            token: res._tokenResponse.refreshToken,
+          })
+        );
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
+  useEffect(() => {
+    console.log(state);
+  }, [state]);
+
   return (
-    <div id="contact">
-      <div>
-        <img key={contact.avatar} src={contact.avatar || null} />
-      </div>
-
-      <div>
-        <h1>
-          {contact.first || contact.last ? (
-            <>
-              {contact.first} {contact.last}
-            </>
-          ) : (
-            <i>No Name</i>
-          )}{" "}
-          <Favorite contact={contact} />
-        </h1>
-
-        {contact.twitter && (
-          <p>
-            <a target="_blank" href={`https://twitter.com/${contact.twitter}`}>
-              {contact.twitter}
-            </a>
-          </p>
-        )}
-
-        {contact.notes && <p>{contact.notes}</p>}
-
-        <div>
-          <Form action="edit">
-            <button type="submit">Edit</button>
-          </Form>
-          <Form
-            method="post"
-            action="destroy"
-            onSubmit={(event) => {
-              if (!confirm("Please confirm you want to delete this record.")) {
-                event.preventDefault();
-              }
-            }}
-          >
-            <button type="submit">Delete</button>
-          </Form>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function Favorite({ contact }) {
-  // yes, this is a `let` for later
-  let favorite = contact.favorite;
-  return (
-    <Form method="post">
+    <div>
+      <h1>Login</h1>
+      Email:
+      <br />
+      <input
+        type="text"
+        value={email}
+        className="text-black"
+        onChange={(e) => setEmail(e.target.value)}
+      />
+      <br />
+      Password:
+      <br />
+      <input
+        type="password"
+        value={password}
+        className="text-black"
+        onChange={(e) => setPassword(e.target.value)}
+      />
+      <br />
       <button
-        name="favorite"
-        value={favorite ? "false" : "true"}
-        aria-label={favorite ? "Remove from favorites" : "Add to favorites"}
+        // onClick={() => dispatch(logIn({ email: email, password: password }))}
+        onClick={() => log()}
       >
-        {favorite ? "★" : "☆"}
+        Log In
       </button>
-    </Form>
+    </div>
   );
 }

@@ -1,7 +1,11 @@
 import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Link, Outlet } from "react-router-dom";
+import { logOut } from "../store/slices/firebaseSlice";
 
 const Header = ({}) => {
+  const state = useSelector((state) => state.firebase);
+  const dispatch = useDispatch();
   return (
     <div
       className="p-4 rounded-b-lg md:flex md:flex-row sm:flex-col
@@ -11,7 +15,7 @@ const Header = ({}) => {
         <h1 className="text-text">Cloud Files</h1>
       </div>
       <div>
-        <Navbar />
+        <Navbar state={state} dispatch={dispatch} />
       </div>
 
       <div className="divide-x flex-row flex divide-selected justify-center">
@@ -72,18 +76,29 @@ const Icon = ({ d, hoverColor, navigateTo }) => {
   );
 };
 
-const Navbar = () => {
+const Navbar = ({ state, dispatch }) => {
   return (
     <nav className="flex-row divide-x divide-textBlue">
-      <Link className="self-center text-text px-3" to={`login`}>
-        Login
-      </Link>
+      {!state.loggedIn && (
+        <Link className="self-center text-text px-3" to={`login`}>
+          Login
+        </Link>
+      )}
       <Link className="self-center text-text px-3" to={`/`}>
         Search documents
       </Link>
       <Link className="self-center text-text px-3" to={`/`}>
         Download document
       </Link>
+      {state.loggedIn && (
+        <button
+          onClick={() => {
+            dispatch(logOut());
+          }}
+        >
+          <h1 className="self-center text-textBlue px-3">Logout</h1>
+        </button>
+      )}
     </nav>
   );
 };
