@@ -55,31 +55,33 @@ export default function Login() {
       }}
     >
       <div className="px-6 text-gray-800 flex flex-col">
-        <h1 className="mt-10 mb-5 self-center font-bold text-primary leading-tight text-4xl">
+        <h1 className="mt-10 mb-5 self-center font-bold leading-tight text-4xl">
           Cloud Files
         </h1>
-        <div className="flex xl:justify-center lg:justify-between justify-center items-center flex-wrap h-full g-6">
-          <div className="grow-0 shrink-1 md:shrink-0 basis-auto xl:w-6/12 lg:w-6/12 md:w-9/12 mb-12 md:mb-0">
+        <div className=" flex xl:justify-center lg:justify-between justify-center items-center flex-wrap h-1/2 g-6 md:px-10 px-0">
+          <div className=" justify-center flex grow-0 shrink-1 md:shrink-0 basis-auto xl:w-6/12 lg:w-6/12 md:w-6/12 mb-10 md:mb-0">
             <img
-              src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/draw2.webp"
-              className="w-full"
+              src="./documents2.png"
+              className="w-2/3 self-center"
               alt="Sample image"
             />
           </div>
-          {registration.register ? (
-            <RegisterForm
-              setRegistration={setRegistration}
-              log={log}
-              registration={registration}
-            />
-          ) : (
-            <LoginForm
-              setLogin={setLogin}
-              log={log}
-              setRegistration={setRegistration}
-              registration={registration}
-            />
-          )}
+          <div className="flex justify-center  xl:w-6/12 lg:w-6/12 md:w-6/12 w-full mb-12 md:mb-0 ">
+            {registration.register ? (
+              <RegisterForm
+                setRegistration={setRegistration}
+                log={log}
+                registration={registration}
+              />
+            ) : (
+              <LoginForm
+                setLogin={setLogin}
+                log={log}
+                setRegistration={setRegistration}
+                registration={registration}
+              />
+            )}
+          </div>
         </div>
       </div>
     </section>
@@ -100,7 +102,7 @@ const FormBottom = ({ log, setRegistration, registration }) => {
         {registration.register ? "Register" : "Login"}
       </button>
       <div className="text-center lg:text-left">
-        <p className="text-sm font-semibold mt-2 pt-1 mb-0">
+        <p className="text-sm font-semibold mt-2 pt-1 mb-0 ml-5 flex justify-center flex-col">
           Don't have an account?
           <button
             onClick={() =>
@@ -109,7 +111,7 @@ const FormBottom = ({ log, setRegistration, registration }) => {
                 register: !state.register,
               }))
             }
-            className="text-primary hover:text-red-700 focus:text-red-700 transition duration-200 ease-in-out ml-5"
+            className="text-primary hover:text-red-700 focus:text-red-700 transition duration-200 ease-in-out"
           >
             {registration.register ? "Login" : "Register"}
           </button>
@@ -121,7 +123,7 @@ const FormBottom = ({ log, setRegistration, registration }) => {
 
 const LoginForm = ({ setLogin, setRegistration, registration, log }) => {
   return (
-    <div className="xl:ml-20 xl:w-5/12 lg:w-5/12 md:w-8/12 mb-12 md:mb-0">
+    <div className="xl:ml-20  mb-12 md:mb-0 ">
       <p className="text-lg mb-0 mr-4">Sign in with</p>
       <div
         className="flex items-center my-4 before:flex-1 before:border-t before:border-gray-300
@@ -158,7 +160,7 @@ const LoginForm = ({ setLogin, setRegistration, registration, log }) => {
 
 const RegisterForm = ({ setRegistration, log, registration }) => {
   return (
-    <div className="xl:ml-20 xl:w-5/12 lg:w-5/12 md:w-8/12 mb-12 md:mb-0">
+    <div className="xl:ml-20 mb-12 md:mb-0">
       <p className="text-lg mb-0 mr-4">Register</p>
       <div
         className="flex items-center my-4 before:flex-1 before:border-t before:border-gray-300
@@ -202,7 +204,7 @@ const RegisterForm = ({ setRegistration, log, registration }) => {
 
 const InputElement = ({ setElement, placeholder, type }) => {
   return (
-    <div className="mb-6">
+    <div className="mb-4 transform md:scale-100 scale-90">
       <input
         onChange={setElement}
         type={type}

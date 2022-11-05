@@ -3,10 +3,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { Navigate } from "react-router";
 import { Outlet, Route, Routes, useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
-import { auth } from "../services/firebase";
 import ErrorPage from "../components/error";
 import Header from "../components/header";
 import Loading from "../components/loading";
+import { auth } from "../services/firebase";
 import { logIn, logOut } from "../store/slices/firebaseSlice";
 import "../styles/index.css";
 // ROUTES
@@ -48,8 +48,8 @@ function Root() {
   return (
     <div className={`App bg-white h-screen `}>
       <div className="bg-white flex-col flex-1 ">
-        <div className=" pb-40 ">
-          <Header />
+        <Header />
+        <div className=" pb-20 ">
           <ToastContainer autoClose={3000} />
           {!loading ? (
             <Routes>
