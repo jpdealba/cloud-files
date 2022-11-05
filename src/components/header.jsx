@@ -35,10 +35,10 @@ const Header = ({}) => {
               <NavElement location={location} title={"Files"} path={"/files"} />
             )}
             {isLoggedIn && (
-              <li class="-mb-px h-max self-end">
+              <li className="-mb-px h-max self-end">
                 <Link
                   onClick={() => dispatch(logOut())}
-                  class="bg-white inline-block py-2 md:px-4 px-2 border-b
+                  className="bg-white inline-block py-2 md:px-4 px-2 border-b
                text-gray-400 font-semibold md:text-base text-sm "
                   href="#"
                 >
@@ -58,7 +58,7 @@ const Header = ({}) => {
 
 const NavElement = ({ location, title, path }) => {
   return (
-    <li class="-mb-px h-max self-end">
+    <li className="-mb-px h-max self-end">
       <Link
         to={path}
         className={`inline-block

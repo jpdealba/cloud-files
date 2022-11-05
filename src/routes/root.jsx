@@ -47,7 +47,7 @@ function Root() {
     });
   }, []);
   return (
-    <div className={`App bg-white h-screen scr`}>
+    <div className={`App bg-white h-screen `}>
       <div className="bg-white flex-col flex-1 ">
         <div className=" pb-40 ">
           <Header />
