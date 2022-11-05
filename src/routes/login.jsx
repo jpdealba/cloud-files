@@ -42,7 +42,10 @@ export default function Login() {
         }
       }}
     >
-      <div className="px-6 mt-20 text-gray-800">
+      <div className="px-6 text-gray-800 flex flex-col">
+        <h1 className="mt-10 mb-5 self-center font-bold text-primary leading-tight text-4xl">
+          Cloud Files
+        </h1>
         <div className="flex xl:justify-center lg:justify-between justify-center items-center flex-wrap h-full g-6">
           <div className="grow-0 shrink-1 md:shrink-0 basis-auto xl:w-6/12 lg:w-6/12 md:w-9/12 mb-12 md:mb-0">
             <img

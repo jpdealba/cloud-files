@@ -12,12 +12,12 @@ const Header = ({}) => {
     <ul className="flex border-b lg:px-36  px-0">
       <div className="flex flex-row justify-between w-full">
         <div className="flex flex-row ">
-          <div className="flex">
+          <Link className="flex" to={`/home`}>
             <img
               className="object-cover md:h-9 md:w-9 h-7 w-7 m-1 self-center"
               src="../../public/cf-logo.png"
             ></img>
-          </div>
+          </Link>
           <div className="flex md:ml-3 sm:ml-1">
             <NavElement
               location={location}
@@ -48,7 +48,9 @@ const Header = ({}) => {
             )}
           </div>
         </div>
-        {isLoggedIn && <UserImage userId={state.user.uid} />}
+        {isLoggedIn && (
+          <UserImage userId={state.user.uid} location={location} />
+        )}
       </div>
     </ul>
   );
@@ -74,12 +76,14 @@ const NavElement = ({ location, title, path }) => {
   );
 };
 
-const UserImage = ({ userId }) => {
+const UserImage = ({ userId, location }) => {
   return (
     <Link className="flex justify-end items-end" to={`/profile/${userId}`}>
       <img
-        className="object-cover md:h-9 border-2
-        md:w-9 h-7 w-7 m-1 self-center rounded-full"
+        className={`object-cover md:h-9 border-2 ${
+          location.pathname == "/profile/" + userId && "border-blue-700"
+        }
+        md:w-9 h-7 w-7 m-1 self-center rounded-full`}
         src="https://cdn.pixabay.com/photo/2020/07/01/12/58/icon-5359553_1280.png"
       ></img>
     </Link>
