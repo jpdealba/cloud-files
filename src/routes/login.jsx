@@ -1,4 +1,9 @@
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { data } from "autoprefixer";
+import {
+  // createUserWithEmailAndPassword,
+  getAuth,
+  signInWithEmailAndPassword,
+} from "firebase/auth";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
@@ -24,21 +29,22 @@ export default function Login() {
   const state = useSelector((state) => state.firebase);
   const dispatch = useDispatch();
   const log = async () => {
-    !registration.register &&
-      (await signInWithEmailAndPassword(auth, login.email, login.password)
-        .then((res) => {
-          dispatch(
-            logIn({
-              displayName: res.user.displayName,
-              email: res.user.email,
-              uid: res.user.uid,
-              token: res._tokenResponse.refreshToken,
-            })
-          );
-        })
-        .catch((error) => {
-          toast(error.code);
-        }));
+    registration.register
+      ? checkDatabeforeSubmit(registration)
+      : await signInWithEmailAndPassword(auth, login.email, login.password)
+          .then((res) => {
+            dispatch(
+              logIn({
+                displayName: res.user.displayName,
+                email: res.user.email,
+                uid: res.user.uid,
+                token: res._tokenResponse.refreshToken,
+              })
+            );
+          })
+          .catch((error) => {
+            toast(error.code);
+          });
   };
 
   return (
@@ -163,14 +169,7 @@ const RegisterForm = ({ setRegistration, log, registration }) => {
         setElement={(e) =>
           setRegistration((state) => ({ ...state, email1: e.target.value }))
         }
-        placeholder={"Email"}
-        type={"email"}
-      />
-      <InputElement
-        setElement={(e) =>
-          setRegistration((state) => ({ ...state, email2: e.target.value }))
-        }
-        placeholder={"Verify Email"}
+        placeholder={"Email address"}
         type={"email"}
       />
       <InputElement
@@ -216,4 +215,25 @@ const InputElement = ({ setElement, placeholder, type }) => {
       />
     </div>
   );
+};
+
+const checkDatabeforeSubmit = async (data) => {
+  if (
+    data.email1.length > 0 &&
+    data.password1.length > 0 &&
+    data.password2.length > 0 &&
+    data.username.length > 0
+  ) {
+    if (data.password1 != data.passord2) {
+      toast("Passwords not matching");
+    } else {
+      // await createUserWithEmailAndPassword(auth, data.email1, data.password1)
+      //   .then((res) => {
+      //     console.log(res);
+      //   })
+      //   .catch((err) => console.log(err));
+    }
+  } else {
+    toast("Please complete your information");
+  }
 };

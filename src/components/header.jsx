@@ -15,7 +15,7 @@ const Header = ({}) => {
           <Link className="flex" to={`/home`}>
             <img
               className="object-cover md:h-9 md:w-9 h-7 w-7 m-1 self-center"
-              src="../../public/cf-logo.png"
+              src="/cf-logo.png"
             ></img>
           </Link>
           <div className="flex md:ml-3 sm:ml-1">
