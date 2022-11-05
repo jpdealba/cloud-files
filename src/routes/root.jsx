@@ -10,8 +10,13 @@ import Loading from "../components/loading";
 import firebase from "../services/firebase";
 import { logIn, logOut } from "../store/slices/firebaseSlice";
 import "../styles/index.css";
+// ROUTES
+import Files from "./files";
 import Home from "./home";
 import Login from "./login";
+import Profile from "./profile";
+import Search from "./search";
+
 const auth = getAuth();
 
 function Root() {
@@ -57,6 +62,21 @@ function Root() {
               <Route
                 path="/home"
                 element={isLoggedIn ? <Home /> : <Navigate to="/login" />}
+                errorElement={<ErrorPage />}
+              />
+              <Route
+                path="/search"
+                element={isLoggedIn ? <Search /> : <Navigate to="/login" />}
+                errorElement={<ErrorPage />}
+              />
+              <Route
+                path="/files"
+                element={isLoggedIn ? <Files /> : <Navigate to="/login" />}
+                errorElement={<ErrorPage />}
+              />
+              <Route
+                path="/profile/:id"
+                element={isLoggedIn ? <Profile /> : <Navigate to="/login" />}
                 errorElement={<ErrorPage />}
               />
               <Route

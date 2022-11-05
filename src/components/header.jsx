@@ -9,10 +9,10 @@ const Header = ({}) => {
   const location = useLocation();
   const isLoggedIn = state.loggedIn;
   return (
-    <ul className="flex border-b md:px-36 px-0">
+    <ul className="flex border-b lg:px-36  px-0">
       <div className="flex flex-row justify-between w-full">
         <div className="flex flex-row ">
-          <div className="flex md:ml-3 sm:ml-1">
+          <div className="flex">
             <img
               className="object-cover md:h-9 md:w-9 h-7 w-7 m-1 self-center"
               src="../../public/cf-logo.png"
@@ -48,7 +48,7 @@ const Header = ({}) => {
             )}
           </div>
         </div>
-        {isLoggedIn && <UserImage />}
+        {isLoggedIn && <UserImage userId={state.user.uid} />}
       </div>
     </ul>
   );
@@ -74,15 +74,15 @@ const NavElement = ({ location, title, path }) => {
   );
 };
 
-const UserImage = () => {
+const UserImage = ({ userId }) => {
   return (
-    <button className="flex justify-end items-end">
+    <Link className="flex justify-end items-end" to={`/profile/${userId}`}>
       <img
         className="object-cover md:h-9 border-2
         md:w-9 h-7 w-7 m-1 self-center rounded-full"
         src="https://cdn.pixabay.com/photo/2020/07/01/12/58/icon-5359553_1280.png"
       ></img>
-    </button>
+    </Link>
   );
 };
 

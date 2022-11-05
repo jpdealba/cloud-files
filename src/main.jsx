@@ -16,20 +16,6 @@ import reducers from "./store/reducers";
 import "./styles/index.css";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
-const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <Root />,
-    errorElement: <ErrorPage />,
-    children: [
-      {
-        path: "login",
-        element: <Login />,
-      },
-    ],
-  },
-]);
-
 root.render(
   <Provider store={reducers}>
     <React.StrictMode>
