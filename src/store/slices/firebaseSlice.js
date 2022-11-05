@@ -1,8 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { getAuth, signInWithEmailAndPassword, signOut } from "firebase/auth";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-const auth = getAuth();
+import { auth } from "../../services/firebase";
+
 export const firebaseSlice = createSlice({
   name: "firebase",
   initialState: {
@@ -17,7 +17,7 @@ export const firebaseSlice = createSlice({
     },
     logOut: (state) => {
       sessionStorage.removeItem("Auth Token");
-      signOut(auth);
+      auth.signOut();
       state.user = {};
       state.loggedIn = false;
     },

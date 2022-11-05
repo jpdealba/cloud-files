@@ -1,14 +1,14 @@
-import { data } from "autoprefixer";
 import {
-  // createUserWithEmailAndPassword,
+  createUserWithEmailAndPassword,
   getAuth,
   signInWithEmailAndPassword,
+  updateProfile,
 } from "firebase/auth";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import firebase from "../services/firebase";
+// import { auth } from "../services/firebase";
 import { increment } from "../store/slices/counterSlice";
 import { logIn } from "../store/slices/firebaseSlice";
 const auth = getAuth();
@@ -21,7 +21,6 @@ export default function Login() {
   const [registration, setRegistration] = useState({
     register: false,
     email: "",
-    email2: "",
     username: "",
     password1: "",
     password2: "",
@@ -30,7 +29,7 @@ export default function Login() {
   const dispatch = useDispatch();
   const log = async () => {
     registration.register
-      ? checkDatabeforeSubmit(registration)
+      ? checkDatabeforeSubmit(registration, dispatch)
       : await signInWithEmailAndPassword(auth, login.email, login.password)
           .then((res) => {
             dispatch(
@@ -93,9 +92,9 @@ const FormBottom = ({ log, setRegistration, registration }) => {
       <button
         onClick={() => log()}
         type="button"
-        className="inline-block px-7 py-3 bg-primary text-white font-medium 
-                  text-sm leading-snug uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 
-                  focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg 
+        className="inline-block px-7 py-3 bg-primary text-white font-medium
+                  text-sm leading-snug uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700
+                  focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg
                   transition duration-150 ease-in-out"
       >
         {registration.register ? "Register" : "Login"}
@@ -125,7 +124,7 @@ const LoginForm = ({ setLogin, setRegistration, registration, log }) => {
     <div className="xl:ml-20 xl:w-5/12 lg:w-5/12 md:w-8/12 mb-12 md:mb-0">
       <p className="text-lg mb-0 mr-4">Sign in with</p>
       <div
-        className="flex items-center my-4 before:flex-1 before:border-t before:border-gray-300 
+        className="flex items-center my-4 before:flex-1 before:border-t before:border-gray-300
               before:mt-0.5 after:flex-1 after:border-t after:border-gray-300 after:mt-0.5"
       ></div>
       <InputElement
@@ -162,12 +161,12 @@ const RegisterForm = ({ setRegistration, log, registration }) => {
     <div className="xl:ml-20 xl:w-5/12 lg:w-5/12 md:w-8/12 mb-12 md:mb-0">
       <p className="text-lg mb-0 mr-4">Register</p>
       <div
-        className="flex items-center my-4 before:flex-1 before:border-t before:border-gray-300 
+        className="flex items-center my-4 before:flex-1 before:border-t before:border-gray-300
               before:mt-0.5 after:flex-1 after:border-t after:border-gray-300 after:mt-0.5"
       ></div>
       <InputElement
         setElement={(e) =>
-          setRegistration((state) => ({ ...state, email1: e.target.value }))
+          setRegistration((state) => ({ ...state, email: e.target.value }))
         }
         placeholder={"Email address"}
         type={"email"}
@@ -180,7 +179,7 @@ const RegisterForm = ({ setRegistration, log, registration }) => {
       />
       <InputElement
         setElement={(e) =>
-          setRegistration((state) => ({ ...state, password11: e.target.value }))
+          setRegistration((state) => ({ ...state, password1: e.target.value }))
         }
         placeholder={"Password"}
         type={"password"}
@@ -207,7 +206,7 @@ const InputElement = ({ setElement, placeholder, type }) => {
       <input
         onChange={setElement}
         type={type}
-        className="form-control block w-full px-4 py-2 text-lg font-normal text-gray-700 bg-white 
+        className="form-control block w-full px-4 py-2 text-lg font-normal text-gray-700 bg-white
                   bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out
                    m-0 focus:text-gray-700 focus:bg-white focus:border-secondary focus:outline-none"
         id={placeholder}
@@ -217,21 +216,38 @@ const InputElement = ({ setElement, placeholder, type }) => {
   );
 };
 
-const checkDatabeforeSubmit = async (data) => {
+const checkDatabeforeSubmit = async (data, dispatch) => {
   if (
-    data.email1.length > 0 &&
+    data.email.length > 0 &&
     data.password1.length > 0 &&
     data.password2.length > 0 &&
     data.username.length > 0
   ) {
-    if (data.password1 != data.passord2) {
+    if (data.password1 != data.password2) {
       toast("Passwords not matching");
     } else {
-      // await createUserWithEmailAndPassword(auth, data.email1, data.password1)
-      //   .then((res) => {
-      //     console.log(res);
-      //   })
-      //   .catch((err) => console.log(err));
+      await createUserWithEmailAndPassword(auth, data.email, data.password1)
+        .then((user) => {
+          updateProfile(auth.currentUser, {
+            displayName: data.username,
+          });
+
+          dispatch(
+            logIn({
+              displayName: data.username,
+              email: user.user.email,
+              uid: user.user.uid,
+              token: user._tokenResponse.refreshToken,
+            })
+          );
+        })
+        .catch((err) => {
+          if (err.message == "Firebase: Error (auth/email-already-in-use).") {
+            toast("Email already in use");
+          } else {
+            toast(err.message);
+          }
+        });
     }
   } else {
     toast("Please complete your information");

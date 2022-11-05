@@ -1,13 +1,12 @@
-import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Navigate } from "react-router";
 import { Outlet, Route, Routes, useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
+import { auth } from "../services/firebase";
 import ErrorPage from "../components/error";
 import Header from "../components/header";
 import Loading from "../components/loading";
-import firebase from "../services/firebase";
 import { logIn, logOut } from "../store/slices/firebaseSlice";
 import "../styles/index.css";
 // ROUTES
@@ -17,7 +16,7 @@ import Login from "./login";
 import Profile from "./profile";
 import Search from "./search";
 
-const auth = getAuth();
+// const auth = getAuth();
 
 function Root() {
   const state = useSelector((state) => state.firebase);
@@ -27,7 +26,7 @@ function Root() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    onAuthStateChanged(auth, (user) => {
+    auth.onAuthStateChanged((user) => {
       if (user) {
         setIsLoggedIn(true);
         dispatch(

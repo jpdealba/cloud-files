@@ -63,10 +63,10 @@ const NavElement = ({ location, title, path }) => {
         to={path}
         className={`inline-block
         md:text-base text-sm bg-white
-          rounded-t py-2 md:px-4 px-2 text-${
+          rounded-t py-2 md:px-4 px-2 ${
             location.pathname == path
-              ? "blue-700 font-bold border-l border-t border-r"
-              : "blue-500 border-b"
+              ? "text-blue-700 font-bold border-l border-t border-r"
+              : "text-blue-500 border-b"
           }`}
         href="#"
       >
@@ -79,13 +79,17 @@ const NavElement = ({ location, title, path }) => {
 const UserImage = ({ userId, location }) => {
   return (
     <Link className="flex justify-end items-end" to={`/profile/${userId}`}>
-      <img
-        className={`object-cover md:h-9 border-2 ${
-          location.pathname == "/profile/" + userId && "border-blue-700"
-        }
+      <button
+        className="flex justify-end items-end focus:ring-blue-300"
+        id="dropdownInformationButton"
+        data-dropdown-toggle="dropdownInformation"
+      >
+        <img
+          className={`object-cover md:h-9 border-2 hover:border-blue-700
         md:w-9 h-7 w-7 m-1 self-center rounded-full`}
-        src="https://cdn.pixabay.com/photo/2020/07/01/12/58/icon-5359553_1280.png"
-      ></img>
+          src="https://cdn.pixabay.com/photo/2020/07/01/12/58/icon-5359553_1280.png"
+        ></img>
+      </button>
     </Link>
   );
 };
