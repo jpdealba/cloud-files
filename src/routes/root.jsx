@@ -137,7 +137,7 @@ const getDocs = async (dispatch, user) => {
           const gsReferencePreview = ref(storage, file.preview_url)
           await getDownloadURL(gsReferencePreview).
             then(res => {
-              file.preview_url = res
+              file.preview_url = res 
               file.file = res
               resolve(file)
             }).catch(err => reject(401))
