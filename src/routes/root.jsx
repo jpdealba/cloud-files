@@ -43,8 +43,8 @@ function Root() {
           loadMyFiles({files: []})
         );
         dispatch(
-          loadMyFilesImages({ images: val })
-        )
+          loadAllFiles({files: []})
+        );
         setLoading(false);
         setIsLoggedIn(false);
         navigate("/login");
@@ -132,9 +132,6 @@ const getDocs = async (dispatch, user) => {
     }).catch(err => console.log(err))
   
     await axios.get(API_URL + "files/user/" + user.uid).then(async res => {
-      // dispatch(
-      //   loadAllFiles({ files: res.data })
-      // )
       const promises = res.data.map(file => {
         return new Promise(async(resolve, reject) => {
           const gsReferencePreview = ref(storage, file.preview_url)
@@ -147,7 +144,6 @@ const getDocs = async (dispatch, user) => {
         })
       })
       Promise.all(promises).then((val) => {
-        console.log(val)
         dispatch(
           loadAllFiles({ files: val })
         )

@@ -2,6 +2,7 @@ import axios from 'axios';
 import { getDownloadURL, getStorage, ref } from 'firebase/storage';
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
 import { InputElement } from '../components/inputElement';
 import { loadAllFiles, loadMyFiles } from '../store/slices/filesSlice';
 import { API_URL } from '../utilities/utils';
@@ -10,41 +11,49 @@ const storage = getStorage();
 const UploadFile = () => {
   const [selectedFile, setFile] = useState(null)
   const [fileName, setName] = useState("")
+  const [isPublic, setIsPublic] = useState(false)
   const [blob, setBlob] = useState(null)
   const [loading, setLoading] = useState(false)
   const dispatch = useDispatch()
   const state = useSelector(state => state)
   const onSubmit = async (e) => {
     e.preventDefault()
-    setLoading(true)
+    console.log(isPublic)
+    if (!fileName || !selectedFile || !blob) {
+      toast("Complete the information")
+    } else {
+          setLoading(true)
     await axios.post(`${API_URL}files`, {
       creator_id: state.firebase.user.uid,
       file: new File([blob], fileName, { type: blob.type }),
       users: [state.firebase.user.uid],
       creator_username: state.firebase.user.displayName,
-      is_public: false
+      is_public: isPublic
     }, {    headers: {
       'Content-Type': 'multipart/form-data'
     }
     }).then(async file => {
       const gsReferencePreview = ref(storage, file.data.preview_url)
-      await getDownloadURL(gsReferencePreview).
-        then(res => {
-          file.data.preview_url = res
-          file.data.file = res
-          dispatch(
-            loadMyFiles({ files: state.files.myFiles.concat([file.data]) })
-          )
-          dispatch(
-            loadAllFiles({ files: state.files.allFiles.concat([file.data]) })
-          )
-        }).catch(err => console.log(err))
+        await getDownloadURL(gsReferencePreview).
+          then(res => {
+            file.data.preview_url = res
+            file.data.file = res
+            dispatch(
+              loadMyFiles({ files: state.files.myFiles.concat([file.data]) })
+            )
+            dispatch(
+              loadAllFiles({ files: state.files.allFiles.concat([file.data]) })
+            )
+          }).catch(err => console.log(err))
 
-      setBlob(null)
-      setName("")
-      setFile(null)
-      setLoading(false)
-    }).catch(err => { console.log(err);  setLoading(false)})
+        setBlob(null)
+        setName("")
+        setIsPublic(false)
+        setFile(null)
+        setLoading(false)
+      }).catch(err => { console.log(err);  setLoading(false)})
+    }
+
 
   }
 
@@ -62,6 +71,7 @@ const UploadFile = () => {
                 setFile(null);
                 setName("")
                 setBlob(null)
+                setIsPublic(false)
               }}>
                   <svg className="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
@@ -99,7 +109,17 @@ const UploadFile = () => {
             value={state.firebase.user.displayName}
             type={"text"}
           />
-          <div className='flex justify-center items-center w-full'>
+            <div className='flex justify-between items-center w-full'>
+              <div className="flex items-center">
+                <label htmlFor="default-checkbox" className="block mr-2 text-sm font-medium 
+                text-gray-900 dark:text-gray-300">Is It Public?</label>
+                <input id="default-checkbox" type="checkbox"
+                  onChange={(e) => setIsPublic(e.target.checked)}
+                  value={isPublic}
+                  className="w-4 h-4 text-blue-600 bg-gray-100 rounded border-gray-300 
+                  focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800
+                  focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
+              </div>
             <button type={"submit"} placeholder="Submit"
               className="inline-block px-7 py-3 bg-primary text-white font-medium
                         text-sm leading-snug uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700
