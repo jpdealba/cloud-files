@@ -7,19 +7,16 @@ import { loadMyFiles } from '../store/slices/filesSlice';
 import { API_URL } from '../utilities/utils';
 import Element from './element';
 
-const Files = () => {
+const Files = ({}) => {
   // const [image, setImage] = useState()
   // const storage = getStorage();
+  const [images, setImages] = useState([])
   const state = useSelector(state => state)
-  // const gsReference = ref(storage, 'https://firebasestorage.googleapis.com/v0/b/cloudfiles-7a01e.appspot.com/o/files%2F4hZRJZUSaPR5palVlBy0xKJaKCm1%2Fiteso.jpeg?alt=media');
   const dispatch = useDispatch()
 
+  const [loading, setLoading] = useState(true)
   useEffect(() => {
-    axios.get(API_URL + "files/created/" + state.firebase.user.uid).then(res => {
-      dispatch(
-        loadMyFiles({ files: res.data })
-      )
-    }).catch(err => console.log(err))
+    
 
   }, [])
 
@@ -30,7 +27,7 @@ const Files = () => {
       </h1>
       <ul className="dark:divide-gray-700 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 w-auto justify-between flex">
         {
-          state.files.myFiles.map((file, index) => <Element file={file} key={index} />)
+          state.files.myFiles.map((file, index) => <Element file={file} key={index} index={index} />)
         }
       </ul>
     </div>

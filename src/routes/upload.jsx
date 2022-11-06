@@ -17,7 +17,7 @@ const UploadFile = () => {
       creator_id: state.firebase.user.uid,
       file: new File([blob], fileName, { type: blob.type }),
       users: [state.firebase.user.uid],
-      username: state.firebase.user.displayName,
+      creator_username: state.firebase.user.displayName,
       is_public: false
     }, {    headers: {
       'Content-Type': 'multipart/form-data'

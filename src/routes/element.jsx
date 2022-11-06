@@ -1,12 +1,13 @@
 import { getBlob, getDownloadURL, getStorage, ref } from 'firebase/storage';
 import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 
-export default function Element({ file }) {
-  const [image, setImage] = useState()
+export default function Element({ file, index }) {
+  const state = useSelector(state => state)
+  const [image, setImage] = useState(state.files.myFilesImages[index])
   const storage = getStorage();
   const gsReferencePreview = ref(storage, file.preview_url)
   const gsReference = ref(storage, file.file)
-  
   const downloadData = async () => { 
     const blob = await getBlob(gsReference)
     const elem = window.document.createElement('a');
@@ -17,9 +18,6 @@ export default function Element({ file }) {
     document.body.removeChild(elem);
   }
 
-  useEffect(() => {
-    getDownloadURL(gsReferencePreview).then(res => setImage(res))
-  }, [])
   return (
    <li className="pb-3 sm:pb-4 w-full ">
       <div className="flex items-center space-x-4 hover:cursor-pointer border  mx-3 px-5 py-2 rounded-md" onClick={() => downloadData()}>

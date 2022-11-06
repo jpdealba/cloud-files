@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { getBlob, getDownloadURL, getStorage, ref } from 'firebase/storage';
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Navigate } from "react-router";
@@ -8,9 +9,9 @@ import ErrorPage from "../components/error";
 import Header from "../components/header";
 import Loading from "../components/loading";
 import { auth } from "../services/firebase";
-
+const storage = getStorage();
 //REDUCERS
-import { loadMyFiles } from "../store/slices/filesSlice";
+import { loadMyFiles, loadMyFilesImages } from "../store/slices/filesSlice";
 import { logIn, logOut } from "../store/slices/firebaseSlice";
 import "../styles/index.css";
 import { API_URL } from '../utilities/utils';
@@ -30,22 +31,20 @@ function Root() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    auth.onAuthStateChanged((user) => {
+    auth.onAuthStateChanged(async (user) => {
       if (user) {
         setIsLoggedIn(true);
-        dispatch(
-          logIn({
-            displayName: user.displayName,
-            email: user.email,
-            uid: user.uid,
-          })
-        );
-        setLoading(false);
-        navigate("/home");
+        await getDocs(dispatch, user).then(() => {
+          setLoading(false);
+          navigate("/home");
+        })
       } else {
         dispatch(
           loadMyFiles({files: []})
         );
+        dispatch(
+          loadMyFilesImages({ images: val })
+        )
         setLoading(false);
         setIsLoggedIn(false);
         navigate("/login");
@@ -77,7 +76,7 @@ function Root() {
               />
               <Route
                 path="/files"
-                element={isLoggedIn ? <Files /> : <Navigate to="/login" />}
+                element={isLoggedIn ? <Files setLoading={setLoading} /> : <Navigate to="/login" />}
                 errorElement={<ErrorPage />}
               />
               <Route
@@ -101,4 +100,35 @@ function Root() {
   );
 }
 
+const getDocs = async (dispatch, user) => {
+    dispatch(
+      logIn({
+        displayName: user.displayName,
+        email: user.email,
+        uid: user.uid,
+      })
+    );
+    await axios.get(API_URL + "files/created/" + user.uid).then(async res => {
+      dispatch(
+        loadMyFiles({ files: res.data })
+      )
+      const promises = res.data.map(file => {
+        return new Promise(async(resolve, reject) => {
+          const gsReferencePreview = ref(storage, file.preview_url)
+          const image = await getDownloadURL(gsReferencePreview).
+            then(res => resolve(res)).catch(err => reject(401))
+        })
+      })
+      Promise.all(promises).then((val) => {
+        dispatch(
+          loadMyFilesImages({ images: val })
+        )
+      })
+     
+    }).catch(err => console.log(err))
+}
+
+
+
 export default Root;
+
