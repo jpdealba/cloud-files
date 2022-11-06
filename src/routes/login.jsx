@@ -2,14 +2,13 @@ import {
   createUserWithEmailAndPassword,
   getAuth,
   signInWithEmailAndPassword,
-  updateProfile,
+  updateProfile
 } from "firebase/auth";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 // import { auth } from "../services/firebase";
-import { increment } from "../store/slices/counterSlice";
 import { logIn } from "../store/slices/firebaseSlice";
 const auth = getAuth();
 
@@ -25,7 +24,6 @@ export default function Login() {
     password1: "",
     password2: "",
   });
-  const state = useSelector((state) => state.firebase);
   const dispatch = useDispatch();
   const log = async () => {
     registration.register

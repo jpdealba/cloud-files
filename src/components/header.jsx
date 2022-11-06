@@ -9,8 +9,8 @@ const Header = ({}) => {
   const location = useLocation();
   const isLoggedIn = state.loggedIn;
   return (
-    <ul className="flex border-b lg:px-36  px-0">
-      <div className="flex flex-row justify-between w-full">
+    <ul className="flex border-b lg:px-36  px-0 bg-[#f6f6f6]">
+      <div className="flex flex-row justify-between w-full ">
         <div className="flex flex-row ">
           <Link className="flex" to={`/home`}>
             <img
@@ -38,7 +38,7 @@ const Header = ({}) => {
               <li className="-mb-px h-max self-end">
                 <Link
                   onClick={() => dispatch(logOut())}
-                  className="bg-white inline-block py-2 md:px-4 px-2 border-b
+                  className="inline-block py-2 md:px-4 px-2 border-b
                text-gray-400 font-semibold md:text-base text-sm "
                   href="#"
                 >
@@ -62,10 +62,10 @@ const NavElement = ({ location, title, path }) => {
       <Link
         to={path}
         className={`inline-block
-        md:text-base text-sm bg-white
+        md:text-base text-sm 
           rounded-t py-2 md:px-4 px-2 ${
             location.pathname == path
-              ? "text-blue-700 font-bold border-l border-t border-r"
+              ? "text-blue-700 font-bold border-l border-t border-r bg-white"
               : "text-blue-500 border-b"
           }`}
         href="#"
