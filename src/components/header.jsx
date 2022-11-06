@@ -27,8 +27,8 @@ const Header = ({}) => {
             {isLoggedIn && (
               <NavElement
                 location={location}
-                title={"Search"}
-                path={"/search"}
+                title={"Upload"}
+                path={"/upload"}
               />
             )}
             {isLoggedIn && (

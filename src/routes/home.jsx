@@ -1,18 +1,11 @@
 import React from "react";
 
+
+// Pantalla de inicio, aqui se mostrara los archivos mas vistos
 const Home = () => {
   return (
     <div className="w-1/2 h-1/2">
-      {/* <header className="App-header"> */}
-      {/* <img src={logo} className="App-logo" alt="logo" />
-      {user ? <p>Hello, {user.displayName}</p> : <p>Please sign in.</p>}
-      {user ? (
-        <button onClick={signOut}>Sign out</button>
-      ) : (
-        <button onClick={signInWithGoogle}>Sign in with Google</button>
-      )} */}
-      <h1>Home</h1>
-      {/* </header> */}
+      <h1>Todos los archivos a los que tengo acceso</h1>
     </div>
   );
 };

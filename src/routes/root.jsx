@@ -1,3 +1,4 @@
+import axios from 'axios';
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Navigate } from "react-router";
@@ -7,19 +8,22 @@ import ErrorPage from "../components/error";
 import Header from "../components/header";
 import Loading from "../components/loading";
 import { auth } from "../services/firebase";
+
+//REDUCERS
+import { loadMyFiles } from "../store/slices/filesSlice";
 import { logIn, logOut } from "../store/slices/firebaseSlice";
 import "../styles/index.css";
+import { API_URL } from '../utilities/utils';
 // ROUTES
 import Files from "./files";
 import Home from "./home";
 import Login from "./login";
 import Profile from "./profile";
-import Search from "./search";
+import Upload from "./upload";
 
 // const auth = getAuth();
 
 function Root() {
-  const state = useSelector((state) => state.firebase);
   const [isLoggedIn, setIsLoggedIn] = useState();
   const [loading, setLoading] = useState(true);
   const dispatch = useDispatch();
@@ -39,6 +43,9 @@ function Root() {
         setLoading(false);
         navigate("/home");
       } else {
+        dispatch(
+          loadMyFiles({files: []})
+        );
         setLoading(false);
         setIsLoggedIn(false);
         navigate("/login");
@@ -64,8 +71,8 @@ function Root() {
                 errorElement={<ErrorPage />}
               />
               <Route
-                path="/search"
-                element={isLoggedIn ? <Search /> : <Navigate to="/login" />}
+                path="/upload"
+                element={isLoggedIn ? <Upload /> : <Navigate to="/login" />}
                 errorElement={<ErrorPage />}
               />
               <Route
