@@ -10,6 +10,7 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 // import { auth } from "../services/firebase";
 import { logIn } from "../store/slices/firebaseSlice";
+import { InputElement } from '../utilities/componenets';
 const auth = getAuth();
 
 export default function Login() {
@@ -200,21 +201,7 @@ const RegisterForm = ({ setRegistration, log, registration }) => {
   );
 };
 
-const InputElement = ({ setElement, placeholder, type }) => {
-  return (
-    <div className="mb-4 transform md:scale-100 scale-90">
-      <input
-        onChange={setElement}
-        type={type}
-        className="form-control block w-full px-4 py-2 text-lg font-normal text-gray-700 bg-white
-                  bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out
-                   m-0 focus:text-gray-700 focus:bg-white focus:border-secondary focus:outline-none"
-        id={placeholder}
-        placeholder={placeholder}
-      />
-    </div>
-  );
-};
+
 
 const checkDatabeforeSubmit = async (data, dispatch) => {
   if (
