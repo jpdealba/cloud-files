@@ -11,7 +11,7 @@ import Loading from "../components/loading";
 import { auth } from "../services/firebase";
 const storage = getStorage();
 //REDUCERS
-import { loadMyFiles, loadMyFilesImages } from "../store/slices/filesSlice";
+import { loadAllFiles, loadAllFilesImages, loadMyFiles, loadMyFilesImages } from "../store/slices/filesSlice";
 import { logIn, logOut } from "../store/slices/firebaseSlice";
 import "../styles/index.css";
 import { API_URL } from '../utilities/utils';
@@ -109,23 +109,52 @@ const getDocs = async (dispatch, user) => {
       })
     );
     await axios.get(API_URL + "files/created/" + user.uid).then(async res => {
-      dispatch(
-        loadMyFiles({ files: res.data })
-      )
+      // dispatch(
+      //   loadMyFiles({ files: res.data })
+      // )
       const promises = res.data.map(file => {
         return new Promise(async(resolve, reject) => {
           const gsReferencePreview = ref(storage, file.preview_url)
-          const image = await getDownloadURL(gsReferencePreview).
-            then(res => resolve(res)).catch(err => reject(401))
+          await getDownloadURL(gsReferencePreview).
+            then(res => {
+              file.preview_url = res
+              file.file = res
+              resolve(file)
+            }).catch(err => reject(401))
         })
       })
       Promise.all(promises).then((val) => {
         dispatch(
-          loadMyFilesImages({ images: val })
+          loadMyFiles({ files: val })
+        )
+      }).catch(err => console.log("test"))
+     
+    }).catch(err => console.log(err))
+  
+    await axios.get(API_URL + "files/user/" + user.uid).then(async res => {
+      // dispatch(
+      //   loadAllFiles({ files: res.data })
+      // )
+      const promises = res.data.map(file => {
+        return new Promise(async(resolve, reject) => {
+          const gsReferencePreview = ref(storage, file.preview_url)
+          await getDownloadURL(gsReferencePreview).
+            then(res => {
+              file.preview_url = res
+              file.file = res
+              resolve(file)
+            }).catch(err => reject(401))
+        })
+      })
+      Promise.all(promises).then((val) => {
+        console.log(val)
+        dispatch(
+          loadAllFiles({ files: val })
         )
       })
      
     }).catch(err => console.log(err))
+  
 }
 
 

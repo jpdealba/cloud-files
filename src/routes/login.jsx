@@ -9,8 +9,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 // import { auth } from "../services/firebase";
+import { InputElement } from '../components/inputElement';
 import { logIn } from "../store/slices/firebaseSlice";
-import { InputElement } from '../utilities/componenets';
 const auth = getAuth();
 
 export default function Login() {

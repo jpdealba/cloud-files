@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 
 export default function Element({ file, index }) {
   const state = useSelector(state => state)
-  const [image, setImage] = useState(state.files.myFilesImages[index])
+//   const [image, setImage] = useState(state.files.myFilesImages[state.files.myFilesImages.length - 1 - index])
   const storage = getStorage();
   const gsReferencePreview = ref(storage, file.preview_url)
   const gsReference = ref(storage, file.file)
@@ -22,7 +22,7 @@ export default function Element({ file, index }) {
    <li className="pb-3 sm:pb-4 w-full ">
       <div className="flex items-center space-x-4 hover:cursor-pointer border  mx-3 px-5 py-2 rounded-md" onClick={() => downloadData()}>
          <div className="flex-shrink-0">
-            <img className="w-8 h-8 rounded-full" src={image} alt="" />
+            <img className="w-8 h-8 rounded-full" src={file.preview_url} alt="" />
          </div>
          <div className="flex-1 min-w-0">
             <p className="text-sm font-medium text-gray-900 truncate dark:text-white">

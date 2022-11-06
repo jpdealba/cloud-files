@@ -6,6 +6,7 @@ export const filesSlice = createSlice({
     myFiles: [],
     myFilesImages: [],
     allFiles: [],
+    allFilesImages: [],
     searchFiles: [],
   },
   reducers: {
@@ -15,10 +16,21 @@ export const filesSlice = createSlice({
     loadMyFilesImages: (state, { type, payload }) => {
       state.myFilesImages = payload.images;
     },
+    loadAllFiles: (state, { type, payload }) => {
+      state.allFiles = payload.files;
+    },
+    loadAllFilesImages: (state, { type, payload }) => {
+      state.allFilesImages = payload.images;
+    },
   },
 });
 
 // Action creators are generated for each case reducer function
-export const { loadMyFiles, loadMyFilesImages } = filesSlice.actions;
+export const {
+  loadMyFiles,
+  loadMyFilesImages,
+  loadAllFiles,
+  loadAllFilesImages,
+} = filesSlice.actions;
 
 export default filesSlice.reducer;

@@ -1,14 +1,18 @@
 import axios from 'axios';
+import { getDownloadURL, getStorage, ref } from 'firebase/storage';
 import React, { useEffect, useState } from "react";
-import { useSelector } from 'react-redux';
-import { InputElement } from '../utilities/componenets';
+import { useDispatch, useSelector } from 'react-redux';
+import { InputElement } from '../components/inputElement';
+import { loadAllFiles, loadMyFiles } from '../store/slices/filesSlice';
 import { API_URL } from '../utilities/utils';
+const storage = getStorage();
 
 const UploadFile = () => {
   const [selectedFile, setFile] = useState(null)
   const [fileName, setName] = useState("")
   const [blob, setBlob] = useState(null)
   const [loading, setLoading] = useState(false)
+  const dispatch = useDispatch()
   const state = useSelector(state => state)
   const onSubmit = async (e) => {
     e.preventDefault()
@@ -21,7 +25,21 @@ const UploadFile = () => {
       is_public: false
     }, {    headers: {
       'Content-Type': 'multipart/form-data'
-    }}).then(res => {
+    }
+    }).then(async file => {
+      const gsReferencePreview = ref(storage, file.data.preview_url)
+      await getDownloadURL(gsReferencePreview).
+        then(res => {
+          file.data.preview_url = res
+          file.data.file = res
+          dispatch(
+            loadMyFiles({ files: state.files.myFiles.concat([file.data]) })
+          )
+          dispatch(
+            loadAllFiles({ files: state.files.allFiles.concat([file.data]) })
+          )
+        }).catch(err => console.log(err))
+
       setBlob(null)
       setName("")
       setFile(null)
