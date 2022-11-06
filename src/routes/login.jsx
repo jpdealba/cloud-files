@@ -1,3 +1,4 @@
+import axios from 'axios';
 import {
   createUserWithEmailAndPassword,
   getAuth,
@@ -11,6 +12,7 @@ import "react-toastify/dist/ReactToastify.css";
 // import { auth } from "../services/firebase";
 import { InputElement } from '../components/inputElement';
 import { logIn } from "../store/slices/firebaseSlice";
+import { API_URL } from '../utilities/utils';
 const auth = getAuth();
 
 export default function Login() {
@@ -214,11 +216,16 @@ const checkDatabeforeSubmit = async (data, dispatch) => {
       toast("Passwords not matching");
     } else {
       await createUserWithEmailAndPassword(auth, data.email, data.password1)
-        .then((user) => {
+        .then(async (user) => {
           updateProfile(auth.currentUser, {
             displayName: data.username,
           });
-
+          await axios.post(API_URL + "users", {
+            displayName: data.username,
+            email: user.user.email,
+            uid: user.user.uid,
+            friends: []
+          })
           dispatch(
             logIn({
               displayName: data.username,
