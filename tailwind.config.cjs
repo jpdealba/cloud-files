@@ -14,6 +14,7 @@ module.exports = {
         selected: "##EBEBEB",
         text: "#EBEBEB",
         textBlue: "#bacbe8",
+        shadow: "rgba(0, 0, 0, 0.1)",
       },
       boxShadow: {
         header: "0 20px 25px -5px rgba(0, 0, 0, 0.1)",

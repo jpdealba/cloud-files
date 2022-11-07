@@ -22,6 +22,10 @@ export const filesSlice = createSlice({
     loadAllFilesImages: (state, { type, payload }) => {
       state.allFilesImages = payload.images;
     },
+    clearFile: (state, { type, payload }) => {
+      state.allFiles = payload.allFiles;
+      state.myFiles = payload.myFiles;
+    },
   },
 });
 
@@ -31,6 +35,7 @@ export const {
   loadMyFilesImages,
   loadAllFiles,
   loadAllFilesImages,
+  clearFile,
 } = filesSlice.actions;
 
 export default filesSlice.reducer;
